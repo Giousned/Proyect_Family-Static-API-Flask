@@ -43,38 +43,82 @@ class FamilyStructure:
 
     def add_member(self, member):
         # fill this method and update the return
-        initial_length = len(self._members)
 
-        new_member = {     
-            "id": self._generateId(),
+        try:
+            claves_member = member.keys()
+
+            if not "first_name" in claves_member or not "age" in claves_member or not "lucky_numbers" in claves_member:               # member.get("first_name") and member.get("age")
+                return {"code": 400, "mensaje": "Falta el nombre, edad o los números favoritos"}
+            
+            new_member = {     
+            "id": member.get("id",self._generateId()),
             "first_name": member["first_name"],
             "last_name": self.last_name,
             "age": member["age"],
             "lucky_numbers": member["lucky_numbers"]
-        }
+            }
 
-        self._members.append(new_member)
+            self._members.append(new_member)
 
-        final_length = len(self._members)
+            return {"code": 200, "mensaje": "Todo ha ido bien", "members": self._members}
 
-        if final_length == initial_length + 1:
-            return 200
-        else:
-            return 400
+        except:
+            return {"code": 500}  
+
 
     def delete_member(self, id):
         # fill this method and update the return
-        selected_member = [member for member in self._members if member["id"] != id]
-        
-        return selected_member
+
+        try:
+            # if type(id) != "int":
+            #     return {"code": 400, "mensaje": "La ID tiene que ser un número entero"}
+            
+            if id == None:
+                return {"code": 400, "mensaje": "Falta la ID, ID no proporcionada"}
+
+            # if not self._members["id"] in self._members:
+            #     return {"code": 404, "mensaje": "Ningún miembro tiene esa ID"}
+
+            self._members = list(filter(lambda member: member["id"] != id, self._members))
+
+            return {"code": 200, "mensaje": "Todo ha ido bien", "members": self._members}
+
+        except:
+            return {"code": 500}
+            
 
     def get_member(self, id):
         # fill this method and update the return
 
-        selected_member = [member for member in self._members if member["id"] == id]
-        
-        return selected_member[0]
+        try:
+            # if type(id) != "int":
+            #     return {"code": 400, "mensaje": "La ID tiene que ser un número entero"}
+            
+            if id == None:
+                return {"code": 400, "mensaje": "Falta la ID, ID no proporcionada"}
+
+            # if not self._members["id"] in self._members:
+            #     return {"code": 404, "mensaje": "Ningún miembro tiene esa ID"}
+
+            selected_member = [member for member in self._members if member["id"] == id]
+            
+            return {"code": 200, "mensaje": "Todo ha ido bien", "member": selected_member[0]}
+
+        except:
+            return {"code": 500}  
+
 
     # this method is done, it returns a list with all the family members
     def get_all_members(self):
-        return self._members
+        try:
+            return {"code": 200, "members": self._members}
+        except:
+            return {"code": 500}      # Diccionario con el texto y el error
+
+
+    # OTRA FORMA DE HACER LA FUNCION DELETE
+    # def delete_member(self, id):
+    #     # fill this method and update the return
+    #     selected_member = [member for member in self._members if member["id"] != id]
+        
+    #     return selected_member

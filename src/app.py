@@ -29,32 +29,54 @@ def sitemap():
 def get_all_members():
 
     # this is how you can use the Family datastructure by calling its methods
-    members = jackson_family.get_all_members()
+    response = jackson_family.get_all_members()
 
-    return jsonify(members), 200
-
-@app.route('/member/<int:id>', methods=['GET'])
-def get_member(id):
-
-    member = jackson_family.get_member(id)
-
-    return jsonify(member), 200
+    if response["code"] == 500:
+        return jsonify({"error": "Ha habido un error en el servidor"}), 500
+    if response["code"] == 200:
+        return jsonify(response["members"]), 200
 
 @app.route('/member', methods=['POST'])
 def post_member():
 
     new_member = request.json
 
-    member = jackson_family.add_member(new_member)
+    response = jackson_family.add_member(new_member)
 
-    return jsonify(member)
+    if response["code"] == 500:
+        return jsonify({"mensaje": "Ha habido un error en el servidor"}), 500
+    if response["code"] == 200:
+        return jsonify(response["members"]), 200
 
-@app.route('/member/<int:id>', methods=['DELETE'])
-def delete_member(id):
+@app.route('/member/<int:id>', methods=['GET', 'DELETE'])
+def get_member(id):
 
-    member = jackson_family.delete_member(id)
+    if request.method == 'GET':
+        response = jackson_family.get_member(id)
 
-    return jsonify(member), 200
+        if response["code"] == 500:
+            return jsonify({"mensaje": "Ha habido un error en el servidor"}), 500
+        if response["code"] == 200:
+            return jsonify(response["member"]), 200
+    
+    if request.method == 'DELETE':
+        response = jackson_family.delete_member(id)
+
+        if response["code"] == 500:
+            return jsonify({"mensaje": "Ha habido un error en el servidor"}), 500
+        if response["code"] == 200:
+            return jsonify({"done": True}), 200
+
+
+# OTRA FORMA DE HACER, SIN PONER VARIOS METODOS JUNTOS
+# @app.route('/member/<int:id>', methods=['DELETE'])
+# def delete_member(id):
+
+#     member = jackson_family.delete_member(id)
+
+#     all_members = jackson_family.get_all_members()
+
+#     return jsonify({"done": True}), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
