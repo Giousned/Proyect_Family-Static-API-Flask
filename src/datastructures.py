@@ -71,12 +71,13 @@ class FamilyStructure:
 
         try:
             # valores_member = self._members.values()
-            # if type(id) != "int":
-            #     return {"code": 400, "mensaje": "La ID tiene que ser un número entero"}
-            
+            # print(isinstance(id,"int"))
             if id == None:
                 return {"code": 400, "mensaje": "Falta la ID, ID no proporcionada"}
 
+            # if isinstance(id, "int"):
+            #     return {"code": 400, "mensaje": "La ID tiene que ser un número entero"}
+            
             # if not id in valores_member:
             #     return {"code": 404, "mensaje": "Ningún miembro tiene esa ID"}
 
