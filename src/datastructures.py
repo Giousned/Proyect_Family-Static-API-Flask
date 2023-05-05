@@ -70,13 +70,14 @@ class FamilyStructure:
         # fill this method and update the return
 
         try:
+            # valores_member = self._members.values()
             # if type(id) != "int":
             #     return {"code": 400, "mensaje": "La ID tiene que ser un número entero"}
             
             if id == None:
                 return {"code": 400, "mensaje": "Falta la ID, ID no proporcionada"}
 
-            # if not self._members["id"] in self._members:
+            # if not id in valores_member:
             #     return {"code": 404, "mensaje": "Ningún miembro tiene esa ID"}
 
             self._members = list(filter(lambda member: member["id"] != id, self._members))
